@@ -16,6 +16,8 @@ const debug = false
 //     ? 
 //     : "https://app.applivo.com.br/api_2_0/index.php"
 
+export const DOMAIN = "https://convite-livo.vercel.app/"
+
 export const BASE_URL = debug ? "https://app.applivo.com.br/api_2_0/homologacao.php" : "https://app.applivo.com.br/api_2_0/index.php"
 
 export const BASE_HEADERS = {

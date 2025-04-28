@@ -1,5 +1,5 @@
 // app/[id]/layout.tsx
-import { callApi } from "@/api.config";
+import { callApi, DOMAIN } from "@/api.config";
 import "@/app/globals.css";
 import { ROUTE_KEYS } from "@/constants/invite";
 import type { Metadata } from "next";
@@ -32,28 +32,46 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         },
       })
     }
+    const BASE_PATH = `${DOMAIN}/og-images`
 
-
-
-    let title = "Convite";
+    let title = "Livo App | ";
     let description = "Você foi convidado!";
+    let url = ""
 
     switch (data.KEY_ROTA) {
       case ROUTE_KEYS.COMMON_INVITE_KEY:
-        title = data["RECORRENTE"] ? "Convite Recorrente" : "Convite Rápido";
+        title += data["RECORRENTE"] ? "Convite Recorrente" : "Convite Rápido";
         description = data["RECORRENTE"]
-          ? "Preencha este convite para realizar seu cadastro temporário no condomínio de forma prática, segura e sem burocracia."
-          : "Preencha este convite para realizar seu cadastro condomínio de forma prática, segura e sem burocracia."
+          ? "Você foi convidado para acessar o condomínio de forma recorrente! Complete seu cadastro e tenha entradas liberadas por mais tempo, com toda segurança e praticidade."
+          : "Você foi convidado para acessar o condomínio! Complete seu cadastro para garantir seu acesso por um dia, de forma rápida, segura e sem burocracia.";
+        url = data["RECORRENTE"]
+          ? `${BASE_PATH}/recurrent-invite.jpg`
+          : `${BASE_PATH}/invite.jpg`
         break;
+
       case ROUTE_KEYS.RESIDENT_REGISTER_KEY:
-        title = "Finalizar Cadastro";
+        title += "Finalizar Cadastro";
+        description = "Estamos quase lá! Complete seu cadastro e aproveite todos os benefícios do Livo App no seu condomínio.";
+        url = `${BASE_PATH}/register-resident.jpg`
         break;
+
       case ROUTE_KEYS.REGISTER_PET_KEY:
-        title = "Cadastro de Pets";
+        title += "Cadastro de Pets";
+        description = "Seu pet também faz parte da família! Registre seu companheiro e mantenha tudo em dia no condomínio.";
+        url = `${BASE_PATH}/register-pet.jpg`
         break;
+
       case ROUTE_KEYS.UPDATE_IMAGE_KEY:
-        title = "Atualizar Foto";
+        title += "Atualizar Foto";
+        description = "Deixe seu perfil ainda melhor! Atualize sua foto e personalize sua experiência no Livo App.";
+        url = `${BASE_PATH}/update-image.jpg`
         break;
+    }
+
+    if (!id) {
+      title += "Convite vazio";
+      description = "Parece que o seu convite está vazio";
+      url = `${BASE_PATH}/empty-invite.jpg`
     }
 
     return {
@@ -64,7 +82,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         description,
         images: [
           {
-            url: "https://livo-convite.vercel.app/og-images/recorrente.jpg",
+            url,
             width: 1200,
             height: 630,
             alt: title,
