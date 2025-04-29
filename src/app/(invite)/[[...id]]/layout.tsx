@@ -127,12 +127,12 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         }
       }
       return {
-        title: "Erro no convite",
-        description: "Não foi possível carregar o convite.",
+        title,
+        description,
         icons,
         openGraph: {
-          title: "Erro no convite",
-          description: "Não foi possível carregar o convite.",
+          title,
+          description,
           images: [
             {
               url: String(url),
@@ -143,8 +143,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         },
         twitter: {
           card: "summary_large_image",
-          title: "Erro no convite",
-          description: "Não foi possível carregar o convite.",
+          title,
+          description,
           images: [
             {
               url: String(url),
@@ -174,7 +174,6 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
   }
 }
-
 
 export default function RootLayout({
   children,
