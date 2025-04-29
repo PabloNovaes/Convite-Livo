@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       })
     }
 
-    if!(data.RESULT) throw new Error(data.INFO ?? data.MSG)
+    if(!data.RESULT) throw new Error(data.INFO ?? data.MSG)
     
     const BASE_PATH = `${DOMAIN}/og-images`
 
