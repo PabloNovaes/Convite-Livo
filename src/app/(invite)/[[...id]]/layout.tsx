@@ -4,7 +4,6 @@ import "@/app/globals.css";
 import { ROUTE_KEYS } from "@/constants/invite";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { use } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,8 +15,29 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const icons = { icon: '/ico.svg' }
+
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
+
+  if (!id) {
+    return {
+      title: "Convite vazio",
+      description: "Parece que o seu convite está vazio",
+      icons,
+      openGraph: {
+        title: "Convite vazio",
+        description: "Parece que o seu convite está vazio",
+        images: [
+          {
+            url: `${DOMAIN}/og-images/empty-invite.jpg`,
+            width: 1200,
+            height: 630,
+          },
+        ],
+      },
+    };
+  }
 
   try {
     const data = {
@@ -28,10 +48,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         body: {
           request: "get_convite_abertura",
           tipo: 1,
-          convite: id ?? '',
+          convite: id[0] ?? '',
         },
       })
     }
+
     const BASE_PATH = `${DOMAIN}/og-images`
 
     let title = "Livo App | ";
@@ -52,7 +73,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       case ROUTE_KEYS.RESIDENT_REGISTER_KEY:
         title += "Finalizar Cadastro";
         description = "Estamos quase lá! Complete seu cadastro e aproveite todos os benefícios do Livo App no seu condomínio.";
-        url = `${BASE_PATH}/register-resident.jpg`
+        url = `${BASE_PATH}/complete-register.jpg`
         break;
 
       case ROUTE_KEYS.REGISTER_PET_KEY:
@@ -68,14 +89,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         break;
     }
 
-    if (!id) {
-      title += "Convite vazio";
-      description = "Parece que o seu convite está vazio";
-      url = `${BASE_PATH}/empty-invite.jpg`
-    }
-
     return {
       title,
+      icons,
       description,
       openGraph: {
         title,
@@ -92,10 +108,47 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     };
 
   } catch (error) {
-    console.error('Erro ao gerar metadata:', error);
+    if (error instanceof Error) {
+      const BASE_PATH = `${DOMAIN}/og-images`
+      let url
+
+      switch (error.message) {
+        case 'Convite Expirado!': `${BASE_PATH}/expired-invite.jpg`
+        default: `${BASE_PATH}/invalid-invite.jpg`
+      }
+      return {
+        title: "Erro no convite",
+        description: "Não foi possível carregar o convite.",
+        icons,
+        openGraph: {
+          title: "Erro no convite",
+          description: "Não foi possível carregar o convite.",
+          images: [
+            {
+              url: String(url),
+              width: 1200,
+              height: 630,
+            },
+          ],
+        },
+        twitter: {
+          card: "summary_large_image",
+          title: "Erro no convite",
+          description: "Não foi possível carregar o convite.",
+          images: [
+            {
+              url: String(url),
+              width: 1200,
+              height: 630,
+            },
+          ],
+        },
+      };
+    }
     return {
       title: "Erro no convite",
       description: "Não foi possível carregar o convite.",
+      icons,
       openGraph: {
         title: "Erro no convite",
         description: "Não foi possível carregar o convite.",
@@ -108,8 +161,10 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         images: ["/error-og-image.jpg"],
       },
     };
+
   }
 }
+
 
 export default function RootLayout({
   children,
@@ -118,12 +173,10 @@ export default function RootLayout({
   params: Promise<{ id: string }>;
   children: React.ReactNode;
 }>) {
-  const { id } = use(params);
 
   return (
     <html lang="pt-BR">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {id}
+      <body className={`${geistSans.variable} ${geistMono.variable} bg-white`}>
         {children}
       </body>
     </html>

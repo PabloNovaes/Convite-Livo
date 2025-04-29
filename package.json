@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "preview": "next build && next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lt": "lt --port 3000 --subdomain seo-test"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
