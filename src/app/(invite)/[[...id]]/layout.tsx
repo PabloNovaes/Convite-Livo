@@ -117,13 +117,13 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       switch (error.message) {
         case 'Convite Expirado!':{
           url = `${BASE_PATH}/expired-invite.jpg`
-          title: "Parece que seu convite expirou"
-          description: "O convite na sua URL não é mais válido. Por favor, entre em contato com a pessoa que te forneceu o link para obter um novo convite."
+          title = "Parece que seu convite expirou"
+          description = "O convite na sua URL não é mais válido. Por favor, entre em contato com a pessoa que te forneceu o link para obter um novo convite."
         }
         default:{
           url = `${BASE_PATH}/invalid-invite.jpg`
-          title: "Convite inválido"
-          description: "O convite que você está tentando usar não é válido ou não foi encontrado. Solicite um novo à pessoa que lhe enviou o link."
+          title = "Convite inválido"
+          description = "O convite que você está tentando usar não é válido ou não foi encontrado. Solicite um novo à pessoa que lhe enviou o link."
         }
       }
       return {
