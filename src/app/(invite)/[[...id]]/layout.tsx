@@ -16,6 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 const icons = { icon: '/ico.svg' }
+const BASE_PATH = `${DOMAIN}/og-images`
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
@@ -54,8 +55,6 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     }
 
     if(!data.RESULT) throw new Error(data.INFO ?? data.MSG)
-    
-    const BASE_PATH = `${DOMAIN}/og-images`
 
     let title = "Livo App | ";
     let description = "Você foi convidado!";
@@ -111,12 +110,21 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
   } catch (error) {
     if (error instanceof Error) {
-      const BASE_PATH = `${DOMAIN}/og-images`
       let url
+      let title
+      let description
 
       switch (error.message) {
-        case 'Convite Expirado!': `${BASE_PATH}/expired-invite.jpg`
-        default: `${BASE_PATH}/invalid-invite.jpg`
+        case 'Convite Expirado!':{
+          url = `${BASE_PATH}/expired-invite.jpg`
+          title: "Parece que seu convite expirou",
+          description: "O convite na sua URL não é mais válido. Por favor, entre em contato com a pessoa que te forneceu o link para obter um novo convite."
+        }
+        default:{
+          url = `${BASE_PATH}/invalid-invite.jpg`
+          title: "Convite inválido",
+          description: "O convite que você está tentando usar não é válido ou não foi encontrado. Solicite um novo à pessoa que lhe enviou o link."
+        }
       }
       return {
         title: "Erro no convite",
