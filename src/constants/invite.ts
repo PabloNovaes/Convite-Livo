@@ -1,4 +1,4 @@
-export type ErrorTypes = "empty-invite" | "invalid-invite" | "expired-invite" | "completed-invite" | ""
+export type ErrorTypes = "empty-invite" | "invalid-invite" | "expired-invite" | "completed-invite" | "updated-image" | "canceled-invite" | ""
 
 interface ErrorInviteTypes {
     title: string;
@@ -12,11 +12,14 @@ export const ROUTE_KEYS = {
     COMMON_INVITE_KEY: "210f1609ea70180dd8a07804d702c09594121a89",
     UPDATE_IMAGE_KEY: "32dafaf3f3317b8fab1dce681f56cb7c3d005f6a",
     REGISTER_PET_KEY: "1490c2db41f2831752d93a530bb96461e9034d07",
+    SELF_REGISTRATION: "11731101c595a0b29e0a2874515f5d9fb2dada81",
 };
 
+export const ROUTES_PATH = ["/foto", "/auto", "/pets"]
+
 export const UPDATE_IMAGE_KEYS = {
-    AUTH_KEY: "7063432fed71dbbba186b5e5fe2ca5b08b1d20bd",
-    NO_AUTH_KEY: "599c8e7234e7ef6d152582fdeea67e6c3dd3d446"
+    AUTH_KEY: "599c8e7234e7ef6d152582fdeea67e6c3dd3d446",
+    NO_AUTH_KEY: "7063432fed71dbbba186b5e5fe2ca5b08b1d20bd"
 }
 
 export const REGISTER_USER_FIELDS = [
@@ -27,26 +30,48 @@ export const REGISTER_USER_FIELDS = [
     { "CAMPO": "TELEFONE" }
 ];
 
+export const residentTypes = {
+    "PROPRIETARIO": "9d95194b40356d379ef46a260537484b23656813",
+    "LOCATARIO": "cb95b6c909ac5ece8d54f3d14d64d03993df5d02",
+    "ADMINISTRADOR": "e13395abd504008413108c6e2424955a551f0a7b",
+    "RESIDENTE": "01521bdfaa189d9baae5d8a66572d1bae967101c"
+};
+
+export const residentLevel = {
+    "TITULAR": "b011227723f160e648472df12316a0214c0b2ae9",
+    "DEPENDENTE": "5245009b55f188c581964e47a4f14befdc848532"
+};
+
 
 export const errorMessages: Record<string, ErrorInviteTypes> = {
     "empty-invite": {
-        title: "Parece que seu convite está vazio",
-        description: "Notamos a ausência de um convite valido na sua URL, entre em contato com a pessoa que te forneceu o link para mais detalhes."
+        title: "Convite não encontrado!",
+        description:
+            "Não localizamos um convite válido na sua URL. Verifique se o link está correto ou solicite um novo à pessoa que lhe enviou.",
     },
     "invalid-invite": {
-        title: "Convite inválido",
-        description: "O convite que você está tentando usar não é válido ou não foi encontrado. Solicite um novo à pessoa que lhe enviou o link."
+        title: "Convite inválido!",
+        description:
+            "O convite que você tentou acessar não é válido ou não existe. Por favor, confirme o link ou peça um novo para quem lhe enviou.",
     },
     "expired-invite": {
-        title: "Parece que seu convite expirou",
-        description: "O convite na sua URL não é mais válido. Por favor, entre em contato com a pessoa que te forneceu o link para obter um novo convite."
+        title: "Seu convite expirou!",
+        description:
+            "O convite informado não está mais ativo. Entre em contato com a pessoa que gerou o convite para solicitar um novo.",
+    },
+    "canceled-invite": {
+        title: "Convite cancelado!",
+        description:
+            "Este convite foi cancelado pelo morador. Recomendamos que você entre em contato com o mesmo para mais informações.",
     },
     "completed-invite": {
-        title: "Esse convite já foi preenchido",
-        description: "Parece que o convite que está tentando acessar já foi preenchido. Será necessario solicitar um novo"
+        title: "Convite já utilizado!",
+        description:
+            "Este convite já foi utilizado anteriormente. Para continuar, será necessário solicitar um novo.",
     },
-    "offline": {
-        title: "Parece que você está desconectado",
-        description: "Conecte a uma rede de internete para poder continuar"
-    }
-}
+    "updated-image": {
+        title: "Link de foto já utilizado!",
+        description:
+            "Parece que você já usou este link para atualizar sua foto. Se desejar fazer uma nova atualização, solicite um novo link.",
+    },
+};

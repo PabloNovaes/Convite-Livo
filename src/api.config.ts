@@ -40,6 +40,5 @@ export const callApi = async (method: 'GET' | 'POST', { body, headers, endpoint 
         return res
     } catch (err) {
         console.log(err);
-
     }
 }
